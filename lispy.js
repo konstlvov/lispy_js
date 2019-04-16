@@ -1,12 +1,12 @@
 String.prototype.trim = function() { return this.replace(/^\s+|\s+$/g, ''); };
 
-// конструктор структуры, представляющей контекст исполнения
+// РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ СЃС‚СЂСѓРєС‚СѓСЂС‹, РїСЂРµРґСЃС‚Р°РІР»СЏСЋС‰РµР№ РєРѕРЅС‚РµРєСЃС‚ РёСЃРїРѕР»РЅРµРЅРёСЏ
 function Env(outerEnv, params, args) {
   this._map = {}; // symbol -> cell
   this._outerEnv = outerEnv;
-  // params - параметры функции (задаются при определении функции)
-  // args - аргументы (передаются при реальном вызове этой функции)
-  if (params && args) { // число элементов должно совпадать
+  // params - РїР°СЂР°РјРµС‚СЂС‹ С„СѓРЅРєС†РёРё (Р·Р°РґР°СЋС‚СЃСЏ РїСЂРё РѕРїСЂРµРґРµР»РµРЅРёРё С„СѓРЅРєС†РёРё)
+  // args - Р°СЂРіСѓРјРµРЅС‚С‹ (РїРµСЂРµРґР°СЋС‚СЃСЏ РїСЂРё СЂРµР°Р»СЊРЅРѕРј РІС‹Р·РѕРІРµ СЌС‚РѕР№ С„СѓРЅРєС†РёРё)
+  if (params && args) { // С‡РёСЃР»Рѕ СЌР»РµРјРµРЅС‚РѕРІ РґРѕР»Р¶РЅРѕ СЃРѕРІРїР°РґР°С‚СЊ
     for (var i = 0; i < params.length; i++) {
       this._map[params[i].val] = args[i];
     }
@@ -29,7 +29,7 @@ function Env(outerEnv, params, args) {
   }
 }
 
-// конструкторы встроенных типов
+// РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹ РІСЃС‚СЂРѕРµРЅРЅС‹С… С‚РёРїРѕРІ
 function Cell(type, val) {
   this.type = type;
   this.val = val;
@@ -61,8 +61,8 @@ function List() {
   return new Cell('List', '');
 }
 
-// встроенные функции
-function proc_add(cl) { // cl == cell list, ожидает список cell с типом Number
+// РІСЃС‚СЂРѕРµРЅРЅС‹Рµ С„СѓРЅРєС†РёРё
+function proc_add(cl) { // cl == cell list, РѕР¶РёРґР°РµС‚ СЃРїРёСЃРѕРє cell СЃ С‚РёРїРѕРј Number
   var r = parseInt(cl[0].val);
   for (var i = 1; i < cl.length; i++) {
     r = r +  parseInt(cl[i].val);
@@ -70,7 +70,7 @@ function proc_add(cl) { // cl == cell list, ожидает список cell с типом Number
   return new Atom(r.toString());
 }
 
-function proc_sub(cl) { // cl == cell list, ожидает список cell с типом Number
+function proc_sub(cl) { // cl == cell list, РѕР¶РёРґР°РµС‚ СЃРїРёСЃРѕРє cell СЃ С‚РёРїРѕРј Number
   var r = parseInt(cl[0].val);
   for (var i = 1; i < cl.length; i++) {
     r = r -  parseInt(cl[i].val);
@@ -161,7 +161,7 @@ function proc_HIDE(cl) {
 
 function proc_MANDATORY(cl) {
   for (var i = 0; i < cl.length; i++) {
-    //todo : установить признак обязательности
+    //todo : СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РїСЂРёР·РЅР°Рє РѕР±СЏР·Р°С‚РµР»СЊРЅРѕСЃС‚Рё
     // $('#' + cl[i].val).hide();
   }
   return true_sym;
@@ -170,44 +170,44 @@ function proc_MANDATORY(cl) {
 function proc_REQ_EQUALS(cl) {
   var req_name = cl[0].val;
   var req_cmp_val = cl[1].val; 
-  // todo : реализовать сравнение реквизита, возможно, определить его тип
+  // todo : СЂРµР°Р»РёР·РѕРІР°С‚СЊ СЃСЂР°РІРЅРµРЅРёРµ СЂРµРєРІРёР·РёС‚Р°, РІРѕР·РјРѕР¶РЅРѕ, РѕРїСЂРµРґРµР»РёС‚СЊ РµРіРѕ С‚РёРї
   return ($('#' + req_name).val() == req_cmp_val) ? true_sym : false_sym;
 }
 
 function proc_REQ_LESS(cl) {
   var req_name = cl[0].val;
   var req_cmp_val = cl[1].val; 
-  // todo : реализовать сравнение реквизита, возможно, определить его тип
+  // todo : СЂРµР°Р»РёР·РѕРІР°С‚СЊ СЃСЂР°РІРЅРµРЅРёРµ СЂРµРєРІРёР·РёС‚Р°, РІРѕР·РјРѕР¶РЅРѕ, РѕРїСЂРµРґРµР»РёС‚СЊ РµРіРѕ С‚РёРї
   return ($('#' + req_name).val() < req_cmp_val) ? true_sym : false_sym;
 }
 
 function proc_REQ_GREATER(cl) {
   var req_name = cl[0].val;
   var req_cmp_val = cl[1].val; 
-  // todo : реализовать сравнение реквизита, возможно, определить его тип
+  // todo : СЂРµР°Р»РёР·РѕРІР°С‚СЊ СЃСЂР°РІРЅРµРЅРёРµ СЂРµРєРІРёР·РёС‚Р°, РІРѕР·РјРѕР¶РЅРѕ, РѕРїСЂРµРґРµР»РёС‚СЊ РµРіРѕ С‚РёРї
   return ($('#' + req_name).val() > req_cmp_val) ? true_sym : false_sym;
 }
 
 function proc_REQ_LESS_OR_EQUALS(cl) {
   var req_name = cl[0].val;
   var req_cmp_val = cl[1].val; 
-  // todo : реализовать сравнение реквизита, возможно, определить его тип
+  // todo : СЂРµР°Р»РёР·РѕРІР°С‚СЊ СЃСЂР°РІРЅРµРЅРёРµ СЂРµРєРІРёР·РёС‚Р°, РІРѕР·РјРѕР¶РЅРѕ, РѕРїСЂРµРґРµР»РёС‚СЊ РµРіРѕ С‚РёРї
   return ($('#' + req_name).val() <= req_cmp_val) ? true_sym : false_sym;
 }
 
 function proc_REQ_GREATER_OR_EQUALS(cl) {
   var req_name = cl[0].val;
   var req_cmp_val = cl[1].val; 
-  // todo : реализовать сравнение реквизита, возможно, определить его тип
+  // todo : СЂРµР°Р»РёР·РѕРІР°С‚СЊ СЃСЂР°РІРЅРµРЅРёРµ СЂРµРєРІРёР·РёС‚Р°, РІРѕР·РјРѕР¶РЅРѕ, РѕРїСЂРµРґРµР»РёС‚СЊ РµРіРѕ С‚РёРї
   return ($('#' + req_name).val() >= req_cmp_val) ? true_sym : false_sym;
 }
 
-// глобальные символы
+// РіР»РѕР±Р°Р»СЊРЅС‹Рµ СЃРёРјРІРѕР»С‹
 nil = new Atom('nil');
 true_sym = new Atom('#t');
 false_sym = new Atom('#f');
 
-// глобальная env и предзаданные в ней символы
+// РіР»РѕР±Р°Р»СЊРЅР°СЏ env Рё РїСЂРµРґР·Р°РґР°РЅРЅС‹Рµ РІ РЅРµР№ СЃРёРјРІРѕР»С‹
 global_env = new Env(null, null, null);
 global_env.add('nil', nil);
 global_env.add('#t', true_sym);
@@ -231,8 +231,8 @@ global_env.add('REQ>', new Proc(proc_REQ_GREATER));
 global_env.add('REQ<=', new Proc(proc_REQ_LESS_OR_EQUALS));
 global_env.add('REQ>=', new Proc(proc_REQ_GREATER_OR_EQUALS));
 
-// лексический анализатор. todo : надо бы сделать, чтоб поддерживал пробелы
-// в строках
+// Р»РµРєСЃРёС‡РµСЃРєРёР№ Р°РЅР°Р»РёР·Р°С‚РѕСЂ. todo : РЅР°РґРѕ Р±С‹ СЃРґРµР»Р°С‚СЊ, С‡С‚РѕР± РїРѕРґРґРµСЂР¶РёРІР°Р» РїСЂРѕР±РµР»С‹
+// РІ СЃС‚СЂРѕРєР°С…
 function tokenize(s) {
   var res = [];
   s = s.replace(/\(/g, " ( ");
@@ -246,10 +246,10 @@ function tokenize(s) {
   return res;
 }
 
-// Синтаксический анализатор
-// Возвращает дерево синтаксического разбора из списка токенов.
-// "Тип" возвращаемого значения - Cell
-// в примере называется read_from
+// РЎРёРЅС‚Р°РєСЃРёС‡РµСЃРєРёР№ Р°РЅР°Р»РёР·Р°С‚РѕСЂ
+// Р’РѕР·РІСЂР°С‰Р°РµС‚ РґРµСЂРµРІРѕ СЃРёРЅС‚Р°РєСЃРёС‡РµСЃРєРѕРіРѕ СЂР°Р·Р±РѕСЂР° РёР· СЃРїРёСЃРєР° С‚РѕРєРµРЅРѕРІ.
+// "РўРёРї" РІРѕР·РІСЂР°С‰Р°РµРјРѕРіРѕ Р·РЅР°С‡РµРЅРёСЏ - Cell
+// РІ РїСЂРёРјРµСЂРµ РЅР°Р·С‹РІР°РµС‚СЃСЏ read_from
 // getAST(tokenize('(+ 2 ( * 5 7))'))
 function getAST(tokens) {
   var token = tokens[0];
@@ -267,7 +267,7 @@ function getAST(tokens) {
   }
 }
 
-// интерпретатор
+// РёРЅС‚РµСЂРїСЂРµС‚Р°С‚РѕСЂ
 function _eval(cell, env) {
   if (cell.type == "Symbol")
     return env.findEnv(cell.val).findCell(cell.val);
@@ -275,11 +275,11 @@ function _eval(cell, env) {
     return cell;
   if (cell.type == "String")
     return cell;
-  // nil и пустой список в Scheme эквивалентны
+  // nil Рё РїСѓСЃС‚РѕР№ СЃРїРёСЃРѕРє РІ Scheme СЌРєРІРёРІР°Р»РµРЅС‚РЅС‹
   if (cell.list.length == 0)
     return nil;
   if (cell.list[0].type == "Symbol") {
-    // тут встроенные формы
+    // С‚СѓС‚ РІСЃС‚СЂРѕРµРЅРЅС‹Рµ С„РѕСЂРјС‹
     if (cell.list[0].val == 'quote')
       return cell.list[1];
     if (cell.list[0].val == 'if') { // if test conseq alt
@@ -303,16 +303,16 @@ function _eval(cell, env) {
       return env.findCell(cell.list[1].val);
     }
     if (cell.list[0].val == 'set!') {
-      // символ должен быть уже определен ранее через define
+      // СЃРёРјРІРѕР» РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ СѓР¶Рµ РѕРїСЂРµРґРµР»РµРЅ СЂР°РЅРµРµ С‡РµСЂРµР· define
       return env.findEnv(cell.list[1].val)._map[cell.list[1].val]
          = _eval(cell.list[2], env);
     }
     if (cell.list[0].val == 'begin') {
-      // вычислить все, кроме последней cell
+      // РІС‹С‡РёСЃР»РёС‚СЊ РІСЃРµ, РєСЂРѕРјРµ РїРѕСЃР»РµРґРЅРµР№ cell
       for (var i = 1; i < cell.list.length - 1; i++) {
         _eval(cell.list[i], env);
       }
-      // вычислить и вернуть последнюю cell
+      // РІС‹С‡РёСЃР»РёС‚СЊ Рё РІРµСЂРЅСѓС‚СЊ РїРѕСЃР»РµРґРЅСЋСЋ cell
       return _eval(cell.list[cell.list.length - 1], env);
     }
     if (cell.list[0].val == 'and') {
@@ -339,9 +339,9 @@ function _eval(cell, env) {
       return cell;
     }
   }
-  // если дошли сюда, значит функция (встроенная Proc, либо Lambda)
-  // var proc = new Proc(_eval(cell.list[0])); // так не надо,
-  // а то сама "встроенная" функция будет в proc.proc.proc
+  // РµСЃР»Рё РґРѕС€Р»Рё СЃСЋРґР°, Р·РЅР°С‡РёС‚ С„СѓРЅРєС†РёСЏ (РІСЃС‚СЂРѕРµРЅРЅР°СЏ Proc, Р»РёР±Рѕ Lambda)
+  // var proc = new Proc(_eval(cell.list[0])); // С‚Р°Рє РЅРµ РЅР°РґРѕ,
+  // Р° С‚Рѕ СЃР°РјР° "РІСЃС‚СЂРѕРµРЅРЅР°СЏ" С„СѓРЅРєС†РёСЏ Р±СѓРґРµС‚ РІ proc.proc.proc
   var proc = _eval(cell.list[0], env);
   var argums = [];
   for (var i = 1; i < cell.list.length; i++)
@@ -356,8 +356,8 @@ function _eval(cell, env) {
   return "not a function";
 }
 
-// преобразователь cell -> string, чтобы можно было вывести результат
-// в примере называется to_string
+// РїСЂРµРѕР±СЂР°Р·РѕРІР°С‚РµР»СЊ cell -> string, С‡С‚РѕР±С‹ РјРѕР¶РЅРѕ Р±С‹Р»Рѕ РІС‹РІРµСЃС‚Рё СЂРµР·СѓР»СЊС‚Р°С‚
+// РІ РїСЂРёРјРµСЂРµ РЅР°Р·С‹РІР°РµС‚СЃСЏ to_string
 function cellToString(cell) {
   if (cell.type == 'List') {
     var sa = [];
@@ -385,9 +385,9 @@ function repl(input) {
   return cellToString(_eval(ast, global_env));
 }
 
-// конец интерпретатора ===================================================
+// РєРѕРЅРµС† РёРЅС‚РµСЂРїСЂРµС‚Р°С‚РѕСЂР° ===================================================
 
-/// тесты для интерпретатора
+/// С‚РµСЃС‚С‹ РґР»СЏ РёРЅС‚РµСЂРїСЂРµС‚Р°С‚РѕСЂР°
 function TEST(exp, expected) {
   try {
     var res = repl(exp);
@@ -440,10 +440,10 @@ function runTests() {
   TEST("(twice 5)", "10");
 }
 
-// конец тестов для интерпретатора ===========================================
+// РєРѕРЅРµС† С‚РµСЃС‚РѕРІ РґР»СЏ РёРЅС‚РµСЂРїСЂРµС‚Р°С‚РѕСЂР° ===========================================
 //
 
-// Преобразователь JSON в программу для интерпретатора
+// РџСЂРµРѕР±СЂР°Р·РѕРІР°С‚РµР»СЊ JSON РІ РїСЂРѕРіСЂР°РјРјСѓ РґР»СЏ РёРЅС‚РµСЂРїСЂРµС‚Р°С‚РѕСЂР°
 
 var Rules  = ' o = ' 
 + '{ '
@@ -472,21 +472,21 @@ var Rules  = ' o = '
 + '}'
 ;
 
-// преобразовывает JSON-объект в программу на lispy
+// РїСЂРµРѕР±СЂР°Р·РѕРІС‹РІР°РµС‚ JSON-РѕР±СЉРµРєС‚ РІ РїСЂРѕРіСЂР°РјРјСѓ РЅР° lispy
 function ReqToLispy(reqName, Req) {
   var result = "";
   var if_and = "", if_or = "", if_obj = "", if_and_wrapper = "";
-  // поскольку все равно не формализовано, исходим из примерно такой
-  // грамматики:
+  // РїРѕСЃРєРѕР»СЊРєСѓ РІСЃРµ СЂР°РІРЅРѕ РЅРµ С„РѕСЂРјР°Р»РёР·РѕРІР°РЅРѕ, РёСЃС…РѕРґРёРј РёР· РїСЂРёРјРµСЂРЅРѕ С‚Р°РєРѕР№
+  // РіСЂР°РјРјР°С‚РёРєРё:
   // IF ::= ( [AND_ARRAY] | [OR_ARRAY] | {single clause} )
   if (Req.IF) {
-    // одиночное условие в виде { "=":"value1"}
+    // РѕРґРёРЅРѕС‡РЅРѕРµ СѓСЃР»РѕРІРёРµ РІ РІРёРґРµ { "=":"value1"}
     for (var pn in Req.IF) {
       if (Req.IF[pn].constructor != Array)
         if_obj += ' (' + 'REQ'+pn + ' ' + '"'+reqName+'"'
             + ' ' + '"'+Req.IF[pn]+'"' + ') ';
     }
-    // массив условий AND в виде "AND":[{"=":"value1"},{">=":"value2"},{">=":"value3"}]
+    // РјР°СЃСЃРёРІ СѓСЃР»РѕРІРёР№ AND РІ РІРёРґРµ "AND":[{"=":"value1"},{">=":"value2"},{">=":"value3"}]
     if (Req.IF.AND) {
       if_and += '(and ';
       for (var i = 0; i < Req.IF.AND.length; i++) {
@@ -498,7 +498,7 @@ function ReqToLispy(reqName, Req) {
       }
       if_and += ' ) ';
     }
-    // такой же массив как для AND, но для OR
+    // С‚Р°РєРѕР№ Р¶Рµ РјР°СЃСЃРёРІ РєР°Рє РґР»СЏ AND, РЅРѕ РґР»СЏ OR
     if (Req.IF.OR) {
       if_or += '(or ';
       for (var i = 0; i < Req.IF.AND.length; i++) {
@@ -510,7 +510,7 @@ function ReqToLispy(reqName, Req) {
       }
       if_or += ' ) ';
     }
-    // соединяем все заданные условия через отношение AND
+    // СЃРѕРµРґРёРЅСЏРµРј РІСЃРµ Р·Р°РґР°РЅРЅС‹Рµ СѓСЃР»РѕРІРёСЏ С‡РµСЂРµР· РѕС‚РЅРѕС€РµРЅРёРµ AND
     if (if_obj != '') if_and_wrapper += ' ' + if_obj + ' ';
     if (if_and != '') if_and_wrapper += ' ' + if_and + ' ';
     if (if_or != '') if_and_wrapper += ' ' + if_or + ' ';
@@ -542,7 +542,7 @@ function ReqToLispy(reqName, Req) {
     }
     if (show_se != '' || hide_se != '' || manda_se != '')
       result += ' (begin ' + show_se + ' ' + hide_se + ' ' + manda_se + ' ) ';
-    else // для синтаксической корректности, т.к. if требует минимум 2 аргумента
+    else // РґР»СЏ СЃРёРЅС‚Р°РєСЃРёС‡РµСЃРєРѕР№ РєРѕСЂСЂРµРєС‚РЅРѕСЃС‚Рё, С‚.Рє. if С‚СЂРµР±СѓРµС‚ РјРёРЅРёРјСѓРј 2 Р°СЂРіСѓРјРµРЅС‚Р°
       result += ' #f ';
     result += ' ) '; // for (if
   }
